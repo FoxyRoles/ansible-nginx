@@ -1,0 +1,24 @@
+location ~ /\.git {
+    deny all;
+    return 404;
+}
+
+location ~ /\.hg {
+    deny all;
+    return 404;
+}
+
+location ~ /\.svn {
+    deny all;
+    return 404;
+}
+
+location ~* \.(config|ini|yml|yaml|neon)$ {
+    deny all;
+    return 404;
+}
+
+location ~ /\.ht {
+    deny all;
+    return 404;
+}

@@ -1,0 +1,9 @@
+---
+
+nginx_uid: 1001
+nginx_gid: 1001
+nginx_user: web
+nginx_group: web
+nginx_user_shell: /bin/bash
+
+php_default_port: 9000

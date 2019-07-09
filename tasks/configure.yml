@@ -1,0 +1,43 @@
+---
+
+- name: Ensure sites.d directory for zones present
+  file: path=/etc/nginx/sites.d state=directory mode=0755
+
+- name: Ensure sites-enabled directory absent
+  file: path=/etc/nginx/sites-enabled state=absent
+
+- name: Ensure sites-available directory absent
+  file: path=/etc/nginx/sites-available state=absent
+
+- name: Ensure SSL directory for certs present
+  file: path=/etc/nginx/ssl state=directory mode=0700
+
+- name: Ensure secure_files snippet is present
+  copy: src=secure_files dest=/etc/nginx/snippets/secure_files
+  notify:
+  - restart nginx
+
+- name: Ensure GZIP conf is present
+  copy: src=gzip.conf dest=/etc/nginx/conf.d/gzip.conf
+  notify:
+  - restart nginx
+
+- name: Ensure php.conf is present
+  template: src=php.conf.j2 dest="/etc/nginx/conf.d/php.conf"
+  notify:
+   - restart nginx
+
+- name: Ensure nginx.conf is actual
+  template: src=nginx.conf.j2 dest="/etc/nginx/nginx.conf"
+  notify:
+   - restart nginx
+
+- name: Configure FastCGI parameters
+  copy: src=fastcgi_params dest=/etc/nginx/fastcgi_params
+  notify:
+   - restart nginx
+
+- name: Configure FastCGI limits
+  copy: src=fastcgi_limits dest=/etc/nginx/fastcgi_limits
+  notify:
+   - restart nginx

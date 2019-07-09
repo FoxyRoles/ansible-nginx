@@ -1,0 +1,14 @@
+---
+
+- name: Ensure Diffie Hellman Ephemeral Parameters file is generated
+  command: openssl dhparam -out /etc/nginx/ssl/dhparam4096.pem 4096
+  args:
+    creates: /etc/nginx/ssl/dhparam4096.pem
+
+- name: Ensure proper chmod of dhparam4096.pem
+  file: path=/etc/nginx/ssl/dhparam4096.pem mode=0600
+
+- name: Ensure SSL config present
+  copy: src=ssl.conf dest=/etc/nginx/conf.d/ssl.conf
+  notify:
+   - restart nginx

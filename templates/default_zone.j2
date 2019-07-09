@@ -1,0 +1,27 @@
+server {
+    listen       80 default_server;
+    listen       [::]:80 default_server;
+    server_name  {{ ansible_hostname }};
+
+    access_log   off;
+    error_log    /dev/null crit;
+
+    location / {
+        root   /var/www/html;
+        index  index.html;
+    }
+
+    location /nginx-status {
+        stub_status on;
+        access_log off;
+        allow 127.0.0.1;
+        deny all;
+    }
+
+    location /php-status {
+        fastcgi_pass 127.0.0.1:{{ php_default_port }};
+        include fastcgi_params;
+        allow 127.0.0.1;
+        deny all;
+    }
+}

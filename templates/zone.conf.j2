@@ -1,0 +1,21 @@
+server {
+    listen       80;
+    listen       [::]:80;
+    server_name  {{ item }} *.{{ item }};
+
+    root         /home/web/{{ item }}/www;
+    index        index.html index.php;
+
+    access_log   /var/log/nginx/{{ item }}.access.log;
+    error_log    /var/log/nginx/{{ item }}.error.log;
+
+    try_files $uri $uri/ /index.php?$args;
+
+    include snippets/secure_files;
+
+    location ~ \.php$ {
+        include       fastcgi_params;
+        include       fastcgi_limits;
+        fastcgi_pass  php;
+    }
+}

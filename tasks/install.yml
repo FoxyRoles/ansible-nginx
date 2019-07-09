@@ -1,0 +1,14 @@
+---
+
+- name: "nginx PPA present"
+  apt_repository:
+    repo: ppa:ondrej/nginx
+    filename: nginx
+    state: present
+    update_cache: true
+
+- name: nginx is installed
+  apt: pkg=nginx-light state=present
+
+- name: nginx is running
+  service: name=nginx state=started enabled=yes

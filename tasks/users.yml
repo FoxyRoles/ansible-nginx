@@ -1,0 +1,22 @@
+---
+
+- name: nginx group present
+  group:
+    gid: "{{ nginx_gid }}"
+    name: "{{ nginx_group }}"
+    state: present
+
+- name: nginx user present
+  user:
+    uid: "{{ nginx_uid }}"
+    name: "{{ nginx_user }}"
+    group: "{{ nginx_group }}"
+    shell: "{{ nginx_user_shell }}"
+    state: present
+
+- name: Ensure user home directory present
+  file:
+    path: "/home/{{ nginx_user }}"
+    state: directory
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_group }}"

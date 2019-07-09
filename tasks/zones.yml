@@ -1,0 +1,34 @@
+---
+
+- name: Default zone present
+  template: src=default_zone.j2 dest=/etc/nginx/sites.d/000-default
+  notify:
+   - restart nginx
+
+- name: Empty default index present
+  copy: src=index.html dest=/var/www/html/index.html
+
+- name: Create zones
+  template: src=zone.conf.j2 dest="/etc/nginx/sites.d/{{ item }}"
+  with_items: "{{ nginx_zones }}"
+  when: nginx_zones is defined
+  notify:
+   - restart nginx
+
+- name: Create home directory for zone
+  file:
+    path: "/home/{{ nginx_user }}/{{ item }}"
+    state: directory
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_group }}"
+  with_items: "{{ nginx_zones }}"
+  when: nginx_zones is defined
+
+- name: Create www directory for zone
+  file:
+    path: "/home/{{ nginx_user }}/{{ item }}/www"
+    state: directory
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_group }}"
+  with_items: "{{ nginx_zones }}"
+  when: nginx_zones is defined
