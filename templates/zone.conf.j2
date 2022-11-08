@@ -9,7 +9,7 @@ server {
     access_log   /var/log/nginx/{{ item }}.access.log;
     error_log    /var/log/nginx/{{ item }}.error.log;
 
-    try_files $uri $uri/ /index.php?$args;
+    try_files $uri $uri/ /index.php$is_args$args;
 
     include snippets/secure_files;
 

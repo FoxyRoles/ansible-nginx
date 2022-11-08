@@ -1,15 +1,21 @@
 ---
 
 - name: Default zone present
-  template: src=default_zone.j2 dest=/etc/nginx/sites.d/000-default
+  template:
+    src: default_zone.j2
+    dest: /etc/nginx/sites.d/000-default
   notify:
    - restart nginx
 
 - name: Empty default index present
-  copy: src=index.html dest=/var/www/html/index.html
+  copy:
+    src: index.html
+    dest: /var/www/html/index.html
 
 - name: Create zones
-  template: src=zone.conf.j2 dest="/etc/nginx/sites.d/{{ item }}"
+  template:
+    src: zone.conf.j2
+    dest: "/etc/nginx/sites.d/{{ item }}"
   with_items: "{{ nginx_zones }}"
   when: nginx_zones is defined
   notify:

@@ -6,9 +6,13 @@
     creates: /etc/nginx/ssl/dhparam4096.pem
 
 - name: Ensure proper chmod of dhparam4096.pem
-  file: path=/etc/nginx/ssl/dhparam4096.pem mode=0600
+  file:
+    path: /etc/nginx/ssl/dhparam4096.pem
+    mode: 0600
 
 - name: Ensure SSL config present
-  copy: src=ssl.conf dest=/etc/nginx/conf.d/ssl.conf
+  copy:
+    src: ssl.conf
+    dest: /etc/nginx/conf.d/ssl.conf
   notify:
    - restart nginx

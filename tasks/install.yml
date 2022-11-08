@@ -8,7 +8,17 @@
     update_cache: true
 
 - name: nginx is installed
-  apt: pkg=nginx-light state=present
+  apt:
+    pkg: "{{ nginx_package }}"
+    state: present
+
+- name: nginx modules are installed
+  apt:
+    pkg: libnginx-mod-brotli
+    state: present
 
 - name: nginx is running
-  service: name=nginx state=started enabled=yes
+  service:
+    name: nginx
+    state: started
+    enabled: yes

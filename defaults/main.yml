@@ -1,5 +1,7 @@
 ---
 
+nginx_package: nginx-light
+
 nginx_uid: 1001
 nginx_gid: 1001
 nginx_user: web
