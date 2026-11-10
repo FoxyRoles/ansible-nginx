@@ -26,13 +26,6 @@
   notify:
   - restart nginx
 
-- name: Ensure Brotli conf is present
-  copy:
-    src: brotli.conf
-    dest: /etc/nginx/conf.d/brotli.conf
-  notify:
-  - restart nginx
-
 - name: Ensure php.conf is present
   template:
     src: php.conf.j2

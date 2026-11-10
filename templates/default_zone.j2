@@ -1,7 +1,7 @@
 server {
     listen       80 default_server;
     listen       [::]:80 default_server;
-    server_name  {{ ansible_hostname }};
+    server_name  {{ ansible_facts['hostname'] }};
 
     access_log   off;
     error_log    /dev/null crit;
