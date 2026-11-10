@@ -6,16 +6,6 @@
     state: directory
     mode: 0755
 
-# - name: Ensure sites-enabled directory absent
-#   file:
-#     path: /etc/nginx/sites-enabled
-#     state: absent
-
-# - name: Ensure sites-available directory absent
-#   file:
-#     path: /etc/nginx/sites-available
-#     state: absent
-
 - name: Ensure SSL directory for certs present
   file:
     path: /etc/nginx/ssl

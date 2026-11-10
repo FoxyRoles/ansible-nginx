@@ -9,12 +9,13 @@
 
 - name: nginx is installed
   apt:
-    pkg: "{{ nginx_package }}"
+    pkg: nginx
     state: present
 
 - name: nginx modules are installed
   apt:
-    pkg: libnginx-mod-brotli
+    pkg:
+      - libnginx-mod-http-brotli-filter
     state: present
 
 - name: nginx is running

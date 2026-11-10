@@ -3,7 +3,7 @@ server {
     listen       [::]:80;
     server_name  {{ item }} *.{{ item }};
 
-    root         /home/web/{{ item }}/www;
+    root         /home/{{ nginx_user }}/{{ item }}/www;
     index        index.html index.php;
 
     access_log   /var/log/nginx/{{ item }}.access.log;
