@@ -1,10 +1,36 @@
 ---
 
-- name: "nginx PPA present"
-  apt_repository:
-    repo: ppa:ondrej/nginx
-    filename: nginx
+- name: nginx repository dependencies are installed
+  ansible.builtin.apt:
+    pkg:
+      - ca-certificates
+      - python3-debian
     state: present
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: nginx PPA present
+  ansible.builtin.deb822_repository:
+    name: nginx
+    types:
+      - deb
+    uris:
+      - https://ppa.launchpadcontent.net/ondrej/nginx/ubuntu
+    suites:
+      - "{{ ansible_facts['distribution_release'] }}"
+    components:
+      - main
+    signed_by: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xB8DC7E53946656EFBCE4C1DD71DAEAAB4AD4CAB6
+    state: present
+    mode: '0644'
+
+- name: Legacy nginx repository file is absent
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/nginx.list
+    state: absent
+
+- name: nginx repository cache is updated
+  ansible.builtin.apt:
     update_cache: true
 
 - name: nginx is installed

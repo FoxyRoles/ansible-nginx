@@ -5,6 +5,7 @@ An Ansible role that installs and configures nginx from the
 
 ## Requirements
 
+* Ansible Core 2.15 or newer, with fact gathering enabled.
 * An Ubuntu host supported by the PPA, with APT and system groups `root` and `adm`.
 * Root privileges, for example through `become: true`.
 * The `openssl` command on the target host to generate Diffie–Hellman parameters.
@@ -51,6 +52,14 @@ php_default_port: 9000
 | `nginx_zones` | Optional list of domain names. Omit it or use `[]` to configure only the default site. |
 
 ## Configuration
+
+The role installs `ca-certificates` and `python3-debian`, then configures the PPA
+with `ansible.builtin.deb822_repository` in `/etc/apt/sources.list.d/nginx.sources`.
+The signing key is downloaded from Ubuntu's keyserver using the full fingerprint
+published on the PPA page and scoped to this repository through `Signed-By`.
+During migration, the role removes its former `/etc/apt/sources.list.d/nginx.list`
+file after creating the new source. It refreshes the APT cache before installing
+nginx.
 
 The role enables and starts nginx, installs `libnginx-mod-http-brotli-filter`,
 and configures dynamic Brotli compression at level 6 alongside Gzip. It does not
