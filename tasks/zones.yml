@@ -16,8 +16,7 @@
   template:
     src: zone.conf.j2
     dest: "/etc/nginx/sites.d/{{ item }}.conf"
-  with_items: "{{ nginx_zones }}"
-  when: nginx_zones is defined
+  loop: "{{ nginx_zones | default([]) | flatten(1, skip_nulls=false) }}"
   notify:
    - restart nginx
 
@@ -27,8 +26,7 @@
     state: directory
     owner: "{{ nginx_user }}"
     group: "{{ nginx_group }}"
-  with_items: "{{ nginx_zones }}"
-  when: nginx_zones is defined
+  loop: "{{ nginx_zones | default([]) | flatten(1, skip_nulls=false) }}"
 
 - name: Create www directory for zone
   file:
@@ -36,5 +34,4 @@
     state: directory
     owner: "{{ nginx_user }}"
     group: "{{ nginx_group }}"
-  with_items: "{{ nginx_zones }}"
-  when: nginx_zones is defined
+  loop: "{{ nginx_zones | default([]) | flatten(1, skip_nulls=false) }}"

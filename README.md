@@ -8,7 +8,8 @@ An Ansible role that installs and configures nginx from the
 * Ansible Core 2.15 or newer, with fact gathering enabled.
 * A Debian or Ubuntu host supported by nginx.org, with APT and system groups `root` and `adm`.
 * Root privileges, for example through `become: true`.
-* The `openssl` command on the target host to generate Diffie–Hellman parameters.
+* The `community.crypto` collection on the controller and either OpenSSL or
+  Python `cryptography` on the target for Diffie–Hellman parameters.
 * An available UID and GID for the web account, or values matching an existing
   account. The defaults are both `1000`, which may already belong to a login user.
 

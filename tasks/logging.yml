@@ -6,10 +6,22 @@
     regexp: '^\s*create'
     line: "\tcreate 0640 {{ nginx_user }} adm"
 
-- name: Logs have proper owner
-  command: >-
-    find /var/log/nginx -type f -exec chown {{ nginx_user }}:adm {} \;
+- name: Find Nginx log files
+  ansible.builtin.find:
+    paths: /var/log/nginx
+    file_type: file
+    recurse: true
+    hidden: true
+  register: nginx_log_files
 
-- name: Logs have proper permissions
-  command: >-
-    find /var/log/nginx -type f -exec chmod 0640 {} \;
+- name: Set Nginx log ownership and permissions
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: file
+    follow: false
+    owner: "{{ nginx_user }}"
+    group: adm
+    mode: '0640'
+  loop: "{{ nginx_log_files.files }}"
+  loop_control:
+    label: "{{ item.path }}"
