@@ -1,16 +1,13 @@
 ---
 
-- name: "Logging directory have proper permissions"
-  file:
-    path: /var/log/nginx
-    state: directory
-    owner: root
-    group: adm
-    mode: 'u=rwX,g=rX,o=-'
-    recurse: yes
-
-- name: "Logrotate have proper permissions set"
+- name: "Logrotate have proper log permissions set"
   lineinfile:
     path: /etc/logrotate.d/nginx
     regexp: '^\s*create'
-    line: "\tcreate 0640 root adm"
+    line: "\tcreate 0640 {{ nginx_user }} adm"
+
+- name: Logs have proper owner
+  command: "find /var/log/nginx -type f -exec chown {{ nginx_user }}:adm {} \;"
+
+- name: Logs have proper permissions
+  command: "find /var/log/nginx -type f -exec chmod 0640 {} \;"

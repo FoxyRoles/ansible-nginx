@@ -3,7 +3,7 @@
 - name: Default zone present
   template:
     src: default_zone.j2
-    dest: /etc/nginx/sites.d/000-default
+    dest: /etc/nginx/sites.d/000-default.conf
   notify:
    - restart nginx
 
@@ -15,7 +15,7 @@
 - name: Create zones
   template:
     src: zone.conf.j2
-    dest: "/etc/nginx/sites.d/{{ item }}"
+    dest: "/etc/nginx/sites.d/{{ item }}.conf"
   with_items: "{{ nginx_zones }}"
   when: nginx_zones is defined
   notify:

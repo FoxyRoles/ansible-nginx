@@ -1,7 +1,7 @@
 user {{ nginx_user }};
 worker_processes auto;
 pid /run/nginx.pid;
-include /etc/nginx/modules-enabled/*.conf;
+include /etc/nginx/modules/*.conf;
 
 events {
     worker_connections 1024;
@@ -39,5 +39,5 @@ http {
     ##
 
     include /etc/nginx/conf.d/*.conf;
-    include /etc/nginx/sites.d/*;
+    include /etc/nginx/sites.d/*.conf;
 }

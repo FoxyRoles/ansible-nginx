@@ -12,19 +12,26 @@
     state: directory
     mode: 0700
 
-- name: Ensure secure_files snippet is present
-  copy:
-    src: secure_files
-    dest: /etc/nginx/snippets/secure_files
+- name: Ensure configs are present
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/nginx/conf.d/{{ item }}"
+  loop:
+    - cloudflare.conf
+    - gzip.conf
+    - logging.conf
+    - ssl.conf
   notify:
-  - restart nginx
+    - restart nginx
 
-- name: Ensure GZIP conf is present
-  copy:
-    src: gzip.conf
-    dest: /etc/nginx/conf.d/gzip.conf
+- name: Ensure snippets are present
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: "/etc/nginx/snippets/{{ item }}"
+  loop:
+    - secure_files
   notify:
-  - restart nginx
+    - restart nginx
 
 - name: Ensure php.conf is present
   template:
