@@ -1,10 +1,23 @@
 ---
 
-- name: Ensure sites.d directory for zones present
-  file:
-    path: /etc/nginx/sites.d
+- name: Ensure nginx configuration and web directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
     state: directory
-    mode: 0755
+    mode: '0755'
+  loop:
+    - /etc/nginx/sites.d
+    - /etc/nginx/snippets
+    - /var/www/html
+
+- name: Disable the packaged default virtual host
+  ansible.builtin.command: >-
+    mv --backup=numbered /etc/nginx/conf.d/default.conf
+    /etc/nginx/conf.d/default.conf.disabled
+  args:
+    removes: /etc/nginx/conf.d/default.conf
+  notify:
+    - restart nginx
 
 - name: Ensure SSL directory for certs present
   file:

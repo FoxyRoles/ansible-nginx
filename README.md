@@ -1,12 +1,12 @@
 # ansible-nginx
 
 An Ansible role that installs and configures nginx from the
-[ondrej/nginx stable PPA](https://launchpad.net/~ondrej/+archive/ubuntu/nginx).
+[official stable nginx APT repository](https://nginx.org/en/linux_packages.html).
 
 ## Requirements
 
 * Ansible Core 2.15 or newer, with fact gathering enabled.
-* An Ubuntu host supported by the PPA, with APT and system groups `root` and `adm`.
+* A Debian or Ubuntu host supported by nginx.org, with APT and system groups `root` and `adm`.
 * Root privileges, for example through `become: true`.
 * The `openssl` command on the target host to generate Diffie–Hellman parameters.
 * An available UID and GID for the web account, or values matching an existing
@@ -53,18 +53,17 @@ php_default_port: 9000
 
 ## Configuration
 
-The role installs `ca-certificates` and `python3-debian`, then configures the PPA
-with `ansible.builtin.deb822_repository` in `/etc/apt/sources.list.d/nginx.sources`.
-The signing key is downloaded from Ubuntu's keyserver using the full fingerprint
-published on the PPA page and scoped to this repository through `Signed-By`.
-During migration, the role removes its former `/etc/apt/sources.list.d/nginx.list`
-file after creating the new source. It refreshes the APT cache before installing
-nginx.
+The role removes its former `/etc/apt/sources.list.d/nginx.list` definition,
+installs `ca-certificates` and `python3-debian`, and configures the stable
+repository in `/etc/apt/sources.list.d/nginx.sources` using the distribution
+and release codename of the target host. APT verifies the repository using the
+nginx.org signing key scoped to this source through `Signed-By`.
+The role gives packages from nginx.org priority for nginx and its official
+modules, then refreshes the APT cache and ensures nginx is installed. An existing
+nginx installation follows the normal APT upgrade process.
 
-The role enables and starts nginx, installs `libnginx-mod-http-brotli-filter`,
-and configures dynamic Brotli compression at level 6 alongside Gzip. It does not
-install the Brotli static module or configure serving precompressed `.br` files.
-Dynamic modules are loaded from `/etc/nginx/modules-enabled/*.conf`.
+The role enables and starts nginx and configures Gzip compression. Dynamic
+modules are loaded from `/etc/nginx/modules-enabled/*.conf`.
 
 The role manages `/etc/nginx/nginx.conf`, compression and PHP upstream
 configuration in `/etc/nginx/conf.d`, FastCGI parameters and limits, and a
@@ -75,7 +74,9 @@ configuration files. Configuration changes notify a handler that restarts nginx.
 
 Site configurations are written to `/etc/nginx/sites.d`. The generated nginx
 configuration includes this directory instead of `sites-enabled`; existing
-`sites-available` and `sites-enabled` directories are left in place.
+`sites-available` and `sites-enabled` directories are left in place. The role
+moves the package's `/etc/nginx/conf.d/default.conf` to `default.conf.disabled`
+so the role's default site handles requests to `localhost`.
 
 For each entry in `nginx_zones`, the role creates:
 

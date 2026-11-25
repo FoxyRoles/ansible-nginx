@@ -7,7 +7,9 @@
     line: "\tcreate 0640 {{ nginx_user }} adm"
 
 - name: Logs have proper owner
-  command: "find /var/log/nginx -type f -exec chown {{ nginx_user }}:adm {} \;"
+  command: >-
+    find /var/log/nginx -type f -exec chown {{ nginx_user }}:adm {} \;
 
 - name: Logs have proper permissions
-  command: "find /var/log/nginx -type f -exec chmod 0640 {} \;"
+  command: >-
+    find /var/log/nginx -type f -exec chmod 0640 {} \;
