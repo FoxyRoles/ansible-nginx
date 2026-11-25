@@ -1,0 +1,14 @@
+{{ nginx_local_vhost_managed_comment | comment }}
+{% set address = nginx_local_vhost_bind_address %}
+server {
+    listen {{ '[' ~ address ~ ']' if ':' in address else address }}:{{ nginx_local_vhost_port }} default_server;
+    server_name localhost;
+
+    access_log off;
+
+    include {{ (nginx_local_vhost_locations_dir.rstrip('/') ~ '/*.conf') | to_json(ensure_ascii=false) }};
+
+    location / {
+        return 404;
+    }
+}

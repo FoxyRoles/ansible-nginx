@@ -10,14 +10,19 @@
     - /etc/nginx/snippets
     - /var/www/html
 
-- name: Disable the packaged default virtual host
-  ansible.builtin.command: >-
-    mv --backup=numbered /etc/nginx/conf.d/default.conf
-    /etc/nginx/conf.d/default.conf.disabled
-  args:
-    removes: /etc/nginx/conf.d/default.conf
+- name: Configure the local default virtual host
+  ansible.builtin.template:
+    src: default.conf.j2
+    dest: "{{ nginx_local_vhost_config }}"
+    mode: '0644'
+    backup: true
   notify:
     - restart nginx
+
+- name: Remove the former disabled default virtual host
+  ansible.builtin.file:
+    path: /etc/nginx/conf.d/default.conf.disabled
+    state: absent
 
 - name: Ensure SSL directory for certs present
   file:

@@ -7,3 +7,9 @@ nginx_group: web
 nginx_user_shell: /bin/bash
 
 php_default_port: 9000
+
+nginx_local_vhost_config: "{{ nginx_php_fpm_status_nginx_default_vhost | default('/etc/nginx/conf.d/default.conf') }}"
+nginx_local_vhost_bind_address: "{{ nginx_php_fpm_status_bind_address | default('127.0.0.1') }}"
+nginx_local_vhost_port: "{{ nginx_php_fpm_status_port | default(80) }}"
+nginx_local_vhost_locations_dir: "{{ nginx_php_fpm_status_nginx_locations_dir | default('/etc/nginx/default-vhost.d') }}"
+nginx_local_vhost_managed_comment: "{{ nginx_php_fpm_status_managed_comment | default(ansible_managed | default('Ansible managed')) }}"

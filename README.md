@@ -12,8 +12,7 @@ An Ansible role that installs and configures nginx from the
 * An available UID and GID for the web account, or values matching an existing
   account. The defaults are both `1000`, which may already belong to a login user.
 
-PHP-FPM is optional and must be installed and configured separately if PHP or the
-`/php-status` endpoint is needed. The role expects it on
+PHP-FPM is optional. For PHP requests, the role expects an upstream on
 `127.0.0.1:{{ php_default_port }}`.
 
 ## Example playbook
@@ -48,7 +47,7 @@ php_default_port: 9000
 | `nginx_uid`, `nginx_gid` | UID and GID of the web account and group. |
 | `nginx_user`, `nginx_group` | Web account and group; nginx workers run as `nginx_user`. |
 | `nginx_user_shell` | Login shell of the web account. |
-| `php_default_port` | Local FastCGI port used by the `php` upstream and `/php-status`. |
+| `php_default_port` | Local FastCGI port used by the `php` upstream. |
 | `nginx_zones` | Optional list of domain names. Omit it or use `[]` to configure only the default site. |
 
 ## Configuration
@@ -74,9 +73,14 @@ configuration files. Configuration changes notify a handler that restarts nginx.
 
 Site configurations are written to `/etc/nginx/sites.d`. The generated nginx
 configuration includes this directory instead of `sites-enabled`; existing
-`sites-available` and `sites-enabled` directories are left in place. The role
-moves the package's `/etc/nginx/conf.d/default.conf` to `default.conf.disabled`
-so the role's default site handles requests to `localhost`.
+`sites-available` and `sites-enabled` directories are left in place.
+
+The local default virtual host is configured in `/etc/nginx/conf.d/default.conf`.
+It listens on `127.0.0.1:80` by default, includes `/etc/nginx/default-vhost.d/*.conf`,
+and returns 404 for unmatched requests. The `sunfoxcz.server-status` role supplies
+the nginx and PHP-FPM status locations. The local virtual host uses the monitoring
+role's settings when provided. Its standalone defaults are in
+[defaults/main.yml](defaults/main.yml).
 
 For each entry in `nginx_zones`, the role creates:
 
@@ -90,8 +94,8 @@ Sites use `index.html` or `index.php`, fall back to `/index.php` for missing pat
 and forward PHP requests to the local FastCGI upstream. Removing a domain from
 `nginx_zones` does not delete its existing configuration or content directory.
 
-The default site serves `/var/www/html` with an empty index page and provides
-`/nginx-status` and `/php-status`, accessible only from `127.0.0.1`.
+The default site in `/etc/nginx/sites.d/000-default.conf` serves
+`/var/www/html` with an empty index page.
 
 ### TLS
 
