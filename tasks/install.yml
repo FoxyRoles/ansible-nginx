@@ -4,6 +4,7 @@
   ansible.builtin.file:
     path: /etc/apt/sources.list.d/nginx.list
     state: absent
+  register: nginx_legacy_repository
 
 - name: Install nginx repository prerequisites
   ansible.builtin.apt:
@@ -21,12 +22,14 @@
     suites: "{{ ansible_facts['distribution_release'] }}"
     components: nginx
     signed_by: https://nginx.org/keys/nginx_signing.key
+  register: nginx_repository
 
 - name: nginx is installed
   ansible.builtin.apt:
     pkg: nginx
     state: present
     update_cache: true
+    cache_valid_time: "{{ 0 if (nginx_repository is changed or nginx_legacy_repository is changed) else 3600 }}"
 
 - name: nginx is running
   ansible.builtin.service:
