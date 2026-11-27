@@ -29,7 +29,7 @@
     update_cache: true
 
 - name: nginx is running
-  service:
+  ansible.builtin.service:
     name: nginx
     state: started
     enabled: yes

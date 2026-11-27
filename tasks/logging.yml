@@ -1,7 +1,7 @@
 ---
 
 - name: "Logrotate have proper log permissions set"
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/logrotate.d/nginx
     regexp: '^\s*create'
     line: "\tcreate 0640 {{ nginx_user }} adm"

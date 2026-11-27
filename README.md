@@ -5,7 +5,7 @@ An Ansible role that installs and configures nginx from the
 
 ## Requirements
 
-* Ansible Core 2.15 or newer, with fact gathering enabled.
+* `ansible-core` 2.19 or newer, with fact gathering enabled.
 * A Debian or Ubuntu host supported by nginx.org, with APT and system groups `root` and `adm`.
 * Root privileges, for example through `become: true`.
 * The `community.crypto` collection on the controller and either OpenSSL or

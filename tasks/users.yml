@@ -1,13 +1,13 @@
 ---
 
 - name: nginx group present
-  group:
+  ansible.builtin.group:
     gid: "{{ nginx_gid }}"
     name: "{{ nginx_group }}"
     state: present
 
 - name: nginx user present
-  user:
+  ansible.builtin.user:
     uid: "{{ nginx_uid }}"
     name: "{{ nginx_user }}"
     group: "{{ nginx_group }}"
@@ -15,7 +15,7 @@
     state: present
 
 - name: Ensure user home directory present
-  file:
+  ansible.builtin.file:
     path: "/home/{{ nginx_user }}"
     state: directory
     owner: "{{ nginx_user }}"

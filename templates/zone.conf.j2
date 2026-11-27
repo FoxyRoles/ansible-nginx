@@ -1,3 +1,4 @@
+{{ ansible_managed | default('Ansible managed') | comment(prefix='', postfix='') | trim }}
 server {
     listen       80;
     listen       [::]:80;

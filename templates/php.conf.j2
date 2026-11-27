@@ -1,3 +1,4 @@
+{{ ansible_managed | default('Ansible managed') | comment(prefix='', postfix='') | trim }}
 upstream php {
     server 127.0.0.1:{{ php_default_port }};
 }

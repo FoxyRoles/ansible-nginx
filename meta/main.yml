@@ -1,0 +1,26 @@
+---
+
+galaxy_info:
+  namespace: sunfoxcz
+  role_name: nginx
+  author: Tomas Jacik
+  description: Install nginx from its stable APT repository and configure virtual hosts.
+  company: sunfoxcz
+  license: MIT
+  min_ansible_version: '2.19'
+  platforms:
+    - name: Debian
+      versions:
+        - bookworm
+        - trixie
+    - name: Ubuntu
+      versions:
+        - focal
+        - jammy
+        - noble
+        - resolute
+  galaxy_tags:
+    - nginx
+    - web
+
+dependencies: []

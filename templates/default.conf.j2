@@ -1,4 +1,4 @@
-{{ nginx_local_vhost_managed_comment | comment }}
+{{ nginx_local_vhost_managed_comment | comment(prefix='', postfix='') | trim }}
 {% set address = nginx_local_vhost_bind_address %}
 server {
     listen {{ '[' ~ address ~ ']' if ':' in address else address }}:{{ nginx_local_vhost_port }} default_server;

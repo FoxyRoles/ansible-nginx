@@ -1,19 +1,19 @@
 ---
 
 - name: Default zone present
-  template:
+  ansible.builtin.template:
     src: default_zone.j2
     dest: /etc/nginx/sites.d/000-default.conf
   notify:
    - restart nginx
 
 - name: Empty default index present
-  copy:
+  ansible.builtin.copy:
     src: index.html
     dest: /var/www/html/index.html
 
 - name: Create zones
-  template:
+  ansible.builtin.template:
     src: zone.conf.j2
     dest: "/etc/nginx/sites.d/{{ item }}.conf"
   loop: "{{ nginx_zones | default([]) | flatten(1, skip_nulls=false) }}"
@@ -21,7 +21,7 @@
    - restart nginx
 
 - name: Create home directory for zone
-  file:
+  ansible.builtin.file:
     path: "/home/{{ nginx_user }}/{{ item }}"
     state: directory
     owner: "{{ nginx_user }}"
@@ -29,7 +29,7 @@
   loop: "{{ nginx_zones | default([]) | flatten(1, skip_nulls=false) }}"
 
 - name: Create www directory for zone
-  file:
+  ansible.builtin.file:
     path: "/home/{{ nginx_user }}/{{ item }}/www"
     state: directory
     owner: "{{ nginx_user }}"

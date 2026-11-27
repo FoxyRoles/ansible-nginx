@@ -1,3 +1,4 @@
+{{ ansible_managed | default('Ansible managed') | comment(prefix='', postfix='') | trim }}
 user {{ nginx_user }};
 worker_processes auto;
 pid /run/nginx.pid;
